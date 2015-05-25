@@ -31,13 +31,20 @@ class GitIgnore
     protected $hasChanges = false;
 
     /**
+     * @var bool
+     */
+    protected $skipGitIgnore = false;
+
+    /**
      * @param string $fileLocation
      * @param array $directoriesToIgnoreEntirely
      * @param bool $gitIgnoreAppend
      */
-    public function __construct($fileLocation, array $directoriesToIgnoreEntirely, $gitIgnoreAppend = true)
+    public function __construct($fileLocation, array $directoriesToIgnoreEntirely, $gitIgnoreAppend = true, $skipGitIgnore = false)
     {
         $this->gitIgnoreLocation = $fileLocation;
+        
+        $this->skipGitIgmore = $skipGitIgnore;
 
         if (file_exists($fileLocation) && $gitIgnoreAppend) {
             $this->lines = array_flip(file($fileLocation, FILE_IGNORE_NEW_LINES));
@@ -112,7 +119,7 @@ class GitIgnore
      */
     public function __destruct()
     {
-        if ($this->hasChanges) {
+        if ($this->hasChanges && !$this->skipGitIgmore) {
             file_put_contents($this->gitIgnoreLocation, implode("\n", array_flip($this->lines)));
         }
     }
