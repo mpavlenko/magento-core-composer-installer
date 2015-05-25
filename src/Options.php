@@ -114,6 +114,13 @@ class Options
      * @var bool
      */
     protected $appendToGitIgnore = true;
+    
+    /**
+     * Whether to modify existing git ignore
+     *
+     * @var bool
+     */
+    protected $skipGitIgnore = false;
 
     /**
      * Magento Root Directory
@@ -153,6 +160,10 @@ class Options
         if (isset($coreInstallerOptions['git-ignore-append'])) {
             $this->appendToGitIgnore = (bool) $coreInstallerOptions['git-ignore-append'];
         }
+        
+        if (isset($coreInstallerOptions['git-ignore-skip'])) {
+            $this->skipGitIgnore = (bool) $coreInstallerOptions['git-ignore-skip'];
+        }
 
         if (!isset($packageExtra['magento-root-dir'])) {
             throw new \InvalidArgumentException("magento-root-dir must be specified in root package");
@@ -183,6 +194,14 @@ class Options
     public function appendToGitIgnore()
     {
         return $this->appendToGitIgnore;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function skipGitIgnore()
+    {
+        return $this->skipGitIgnore;
     }
 
     /**
